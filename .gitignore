@@ -1,0 +1,8 @@
+ms_env
+.env
+*.pyc
+__pycache__
+*.sqlite3
+media
+*.zip
+static/admin
