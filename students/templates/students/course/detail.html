@@ -19,11 +19,14 @@
 		</ul>
 	</div>
 	<div class="module">
+		{# object = Django Course or course.object.get(id=4) #}
+
 		{% for content in module.contents.all %}
 			{% with item=content.item %}
 				<h2>{{ item.title }}</h2>
 				{{ item.render }}
 			{% endwith %}
 		{% endfor %}
+
 	</div>
 {% endblock content %}
