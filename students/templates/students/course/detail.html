@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load cache %}
 
 {% block title %}{{ object.title }}{% endblock title %}
 
@@ -21,12 +22,13 @@
 	<div class="module">
 		{# object = Django Course or course.object.get(id=4) #}
 
-		{% for content in module.contents.all %}
-			{% with item=content.item %}
-				<h2>{{ item.title }}</h2>
-				{{ item.render }}
-			{% endwith %}
-		{% endfor %}
-
+		{% for cache 600 module_contents module %}
+			{% for content in module.contents.all %}
+				{% with item=content.item %}
+					<h2>{{ item.title }}</h2>
+					{{ item.render }}
+				{% endwith %}
+			{% endfor %}
+		{% endcache %}
 	</div>
 {% endblock content %}
