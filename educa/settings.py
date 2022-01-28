@@ -49,7 +49,14 @@ INSTALLED_APPS = [
     # Third party apps
     'embed_video',
     'memcache_status',
+    'rest_framework',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'  # An OnRead
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
