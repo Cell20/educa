@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
+        # Read only access to unauthenticated users
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'  # An OnRead
     ]
 }
