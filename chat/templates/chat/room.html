@@ -4,6 +4,7 @@
 
 {% block content %}
 	<div id="chat"></div>
+	{# <div class="message">message</div> #}
 	<div id="chat-input">
 		<input type="text" id="chat-message-input">
 		<input type="submit" id="chat-message-submit" value="Send">
@@ -11,4 +12,42 @@
 {% endblock content %}
 
 {% block domready %}
+	// ws = http, wss = https. We use whole URL instead of of its name because
+	// Channels does not provide a way to reverse URLs.
+	var url = 'ws://' + window.location.host + '/ws/chat/room/' + '{{ course.id }}/';
+	var chatSocket = new WebSocket(url);
+
+	// onmessage: Fired when data is received through WS
+	chatSocket.onmessage = function(e){
+		var data = JSON.parse(e.data);
+		var message = data.message;
+
+		var $chat = $('#chat');
+		$chat.append('<div class="message">' + message + '</div>');  // add new msg to chat log while keeping all prev msgs to the log.
+		$chat.scrollTop($chat[0].scrollHeight);  // scroll the log div to the bottom to ensure that new msg get visibility
+		// scrolling to the total scrollable height of log, by accessing its scrollHeight attribute.
+	};
+
+	// onclose: Fired when connection w/ WS is closed.
+	chatSocket.onclose = function(e){
+		console.error('Chat socket closed unexpectedly');
+	};
+
+	var $input = $('#chat-message-input');
+	var $submit = $('#chat-message-submit');
+
+	$submit.click(function(){
+		var message = $input.val();
+		if(message){
+			chatSocket.send(JSON.stringify({'message': message}));  // send msg
+			$input.val('');  // clear input
+			$input.focus();  // return
+		}
+	});
+	$input.focus();
+	$input.keyup(function(e){
+		if(e.which === 13){
+			$submit.click();
+		}
+	});
 {% endblock domready %}
