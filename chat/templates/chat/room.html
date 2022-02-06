@@ -22,8 +22,18 @@
 		var data = JSON.parse(e.data);
 		var message = data.message;
 
+		var dateOptions = {hour: 'numeric', minute: 'numeric', hour12: true};
+		var datetime = new Date(data['datetime']).toLocaleString('en', dateOptions);
+
+		var isMe = data.user === '{{ request.user }}';
+		var source = isMe ? 'me' : 'other';  // source = if(isMe){'me'}else{'other'}
+		var name = isMe ? 'Me' : data.user; // Mark the sender name as 'Me' if sent by me else as user's name.
+
 		var $chat = $('#chat');
-		$chat.append('<div class="message">' + message + '</div>');  // add new msg to chat log while keeping all prev msgs to the log.
+		$chat.append('<div class="message ' + source + '">' + 
+										'<strong>' + name + '</strong> ' + 
+										'<span class="data">' + datetime + '</span><br>' + 
+										message + '</div>');  // add new msg to chat log while keeping all prev msgs to the log.
 		$chat.scrollTop($chat[0].scrollHeight);  // scroll the log div to the bottom to ensure that new msg get visibility
 		// scrolling to the total scrollable height of log, by accessing its scrollHeight attribute.
 	};
