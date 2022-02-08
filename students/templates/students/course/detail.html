@@ -26,7 +26,7 @@
 	<div class="module">
 		{# object = Django Course or course.object.get(id=4) #}
 
-		{% for cache 600 module_contents module %}
+		{% cache 600 module_contents module %}
 			{% for content in module.contents.all %}
 				{% with item=content.item %}
 					<h2>{{ item.title }}</h2>
